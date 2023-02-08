@@ -192,7 +192,7 @@ public class Aluno {
                 String aluno_name = leitor.next();
                 for (int i=0;i<alunosCadastrados.size();i++){
                     if (alunosCadastrados.get(i).nome.equals(aluno_name)){
-                        System.out.println("Boletim do aluno" alunosCadastrados.get(i).nome);
+                        System.out.println("Boletim do aluno" + alunosCadastrados.get(i).nome);
                         alunosCadastrados.get(i).notas.add("Algebra --- 4.6");
                         alunosCadastrados.get(i).notas.add("logica 1 --- 7.6");
                         alunosCadastrados.get(i).notas.add("Programacao 1 --- 8.6");
