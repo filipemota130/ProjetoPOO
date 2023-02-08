@@ -190,7 +190,7 @@ public class Aluno {
             if (x == 5){
                 System.out.println("Insira o nome do aluno desejado");
                 String aluno_name = leitor.next();
-                for (int i=0;i<alunosCadastrados.size();i ){
+                for (int i=0;i<alunosCadastrados.size();i++){
                     if (alunosCadastrados.get(i).nome.equals(aluno_name)){
                         System.out.println("Boletim do aluno" alunosCadastrados.get(i).nome);
                         alunosCadastrados.get(i).notas.add("Algebra --- 4.6");
