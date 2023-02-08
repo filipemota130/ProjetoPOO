@@ -13,7 +13,7 @@ public class Aluno {
     public int cpf;
     public int rg;
     public int telefone;
-    ArrayList<Aluno> notas = new ArrayList<Aluno>();
+    ArrayList<String> notas = new ArrayList<String>();
     
 
    
@@ -199,7 +199,7 @@ public class Aluno {
                         alunosCadastrados.get(i).notas.add("Teoria da Computacao --- 9.6");
                         alunosCadastrados.get(i).notas.add("Sistemas de Informacao --- 10.0");
                         alunosCadastrados.get(i).notas.add("Calculo3 --- 5.6");
-                        alunosCadastrados.get(i).printBoletim();
+                        //alunosCadastrados.get(i).printBoletim();
                         break;
                     }
                 }
