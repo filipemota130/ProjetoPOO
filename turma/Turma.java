@@ -86,10 +86,11 @@ public class Turma
         ArrayList<Turma> turmas = new ArrayList<Turma>();
         while (true) {
             Scanner option = new Scanner(System.in);
-            System.out.println("[1] - Adicionar turma;\n[2] - Editar dados da turma;\n[3] - Remover turma;\n[4] - Lista dados de uma turma;\n[5] - Listar turmas.\nSelecione um dos comandos: ");
-            int num = 0;
-            num = option.nextInt();
-            if(num == 1){
+            System.out.println("\n[1] - Adicionar turma;\n[2] - Editar dados de uma turma;\n[3] - Remover turma;\n[4] - Lista dados de uma turma;\n[5] - Listar turmas.\n[6] - Encerrar programa.");
+            System.out.print("Selecione um dos comandos: ");
+            String input;
+            input = option.next();
+            if(input.equals("1")) {
                 String id;
                 String disciplina;
                 ArrayList<String> dias = new ArrayList<String>();
@@ -97,7 +98,7 @@ public class Turma
                 String professor;
                 ArrayList<String>  alunos = new ArrayList<String>();
 
-                System.out.println("Insira dos dados da turma:");
+                System.out.println("\nInsira os dados da turma:");
                 System.out.print("ID da turma: ");
                 id = option.next();
                 System.out.print("Disciplina da turma: ");
@@ -136,9 +137,8 @@ public class Turma
                 }
                 Turma turma1 = new Turma(id, disciplina, dias, horarios, professor, alunos);
                 turmas.add(turma1);
-                System.out.print(turmas);
             }
-            else if (num == 2) {
+            else if (input.equals("2")) {
                 Turma turmateste = new Turma(null, null, dias1, horarios1, null, alunos1);
                 String id = option.next();
                 for (int i = 0; i < turmas.size(); i++) {
@@ -150,16 +150,16 @@ public class Turma
                 System.out.print("[1] - Editar ID;\n[2] - Editar disciplina;\n[3] - Editar dias de aula;\n[4] - Editar horários de aula;\n[5] - Editar professor;\n[6] - Editar alunos.\nSelecione um dos comandos: ");
                 int op = option.nextInt();
                 if (op == 1) {
-                    System.out.println("Digite o novo ID:\n>>");
+                    System.out.println("Insira o novo 'ID':\n>>");
                     turmateste.setId(option.next());
 
                 } else if (op == 2) {
-                    System.out.println("Digite o novo Disciplina:\n>>");
+                    System.out.println("Insira o novo 'disciplina':\n>>");
                     turmateste.setDisciplina(option.next());
 
                 } else if (op == 3) {
                     ArrayList<String> lista = new ArrayList<String>();
-                    System.out.println("Digite o novo dias:\n>>");
+                    System.out.println("Digite os novos 'dias':\n>>");
                     System.out.print("Dias de aula da turma (para parar insira 'end'): ");
                     int i = 0;
                     while (i < 14) {
@@ -204,34 +204,44 @@ public class Turma
                     turmateste.setAlunos(lista);
                 }
             }
-            else if (num == 3) {
-                System.out.print("Informe o ID da turma a ser removida: ");
+            else if (input.equals("3")) {
+                System.out.print("\nInforme o ID da turma a ser removida: ");
                 String op = option.next();
-                for (int i = 0; i <= turmas.size(); i++) {
+                for (int i = 0; i < turmas.size(); i++) {
                     if (turmas.get(i).id.equals(op)) {
                         turmas.remove(i);
+                        System.out.printf("A turma %s foi removida do sistema.\n", i);
                     }
                 }
             }
-            else if (num == 4) {
-                System.out.print("Informe o ID da turma a ser buscada: ");
+            else if (input.equals("4")) {
+                System.out.print("\nInforme o ID da turma a ser buscada: ");
                 String src = option.next();
-                for (int i = 0; i <= turmas.size(); i++) {
+                int ne = 0;
+                for (int i = 0; i < turmas.size(); i++) {
                     if (turmas.get(i).id.equals(src)) {
                         turmas.get(i).printTurma();
+                        ne += 1;
                         break;
                     }
                 }
+                if (ne == 0) {
+                    System.out.println("A turma informada não existe no sistema.");    
+                }
+                
             }
-            else if (num == 5) {
-                System.out.println("Turmas cadastradas:");
-                for (int i = 0; i <= turmas.size(); i++) {
+            else if (input.equals("5")) { 
+                System.out.println("\nTurmas cadastradas:");
+                for (int i = 0; i < turmas.size(); i++) {
                     System.out.println(turmas.get(i).disciplina);
                 }
             }
+            else if (input.equals("6")) {
+                System.out.print("\nPrograma encerrado.\n\n");
+                System.exit(0);
+            }
             else {
-                System.out.print("Input inválido. Programa encerrado.\n");
-                System.exit(1);
+                System.out.print("\nInput inválido.\n");
             }
         }
     }
