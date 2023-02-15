@@ -187,9 +187,9 @@ public class Menu {
                 }
                 else if (option == 1) {/* editar infos */
                     System.out.print("ID do professor: ");
-                    String nome = leitor.next();
+                    int id = leitor.nextInt();
                     for (int i = 0; i < professores.size(); i++) {
-                        if (professores.get(i).getNome().equals(nome)) {
+                        if (professores.get(i).getId()==id) {
                             prof1 = professores.get(i);
                             break;
                         }
@@ -226,9 +226,9 @@ public class Menu {
                     }
                 } else if (option == 3) {/* remover */
                     System.out.print("ID do professor: ");
-                    String nome = leitor.next();
+                    int id = leitor.nextInt();
                     for (int i = 0; i < professores.size(); i++) {
-                        if (professores.get(i).getNome().equals(nome)) {
+                        if (professores.get(i).getId()==id){
                             professores_removidos.add(professores.get(i));
                             professores.remove(i);
                             System.out.print("Professor removido");
@@ -269,10 +269,10 @@ public class Menu {
                     aluno1.printAluno();
                     undoList.add("add:aluno:undo");
                 } else if (x == 2) { // Remover
-                    System.out.println("nome do aluno: ");
-                    String nome = leitor.next();
+                    System.out.println("Matrícula do aluno: ");
+                    int id = leitor.nextInt();
                     for (int i = 0; i < alunos.size(); i++) {
-                        if (alunos.get(i).nome.equals(nome)) {
+                        if (alunos.get(i).getMatricula()==id){
                             alunos_removidos.add(alunos.get(i));
                             alunos.remove(i);
                             System.out.println("Aluno removido!\n");
@@ -281,10 +281,10 @@ public class Menu {
                         }
                     }
                 } else if (x == 3) { //Editar
-                    System.out.print("nome do aluno: ");
-                    String id = leitor.next();
+                    System.out.println("Matrícula do aluno: ");
+                    int id = leitor.nextInt();
                     for (int i = 0; i < alunos.size(); i++) {
-                        if (alunos.get(i).nome.equals(id)) {
+                        if (alunos.get(i).getMatricula()==id){
                             alunoT = alunos.get(i);
                             break;
                         }
@@ -322,19 +322,19 @@ public class Menu {
 
                     undoList.add("edit:aluno:undo");
                 } else if (x == 4) {
-                    System.out.print("nome do aluno: ");
-                    String id = leitor.next();
+                    System.out.println("Matrícula do aluno: ");
+                    int id = leitor.nextInt();
                     for (int i = 0; i < alunos.size(); i++) {
-                        if (alunos.get(i).nome.equals(id)) {
+                        if (alunos.get(i).getMatricula()==id){
                             alunos.get(i).printAluno();
                             break;
                         }
                     }
                 } else if (x == 5) {
-                    System.out.print("Matrícula do aluno: ");
-                    int matricula = leitor.nextInt();
+                    System.out.println("Matrícula do aluno: ");
+                    int id = leitor.nextInt();
                     for (int i = 0; i < alunos.size(); i++) {
-                        if (alunos.get(i).matricula == matricula) {
+                        if (alunos.get(i).getMatricula()==id){
                             System.out.println("Boletim do aluno " + alunos.get(i).nome);
                             alunos.get(i).notas.add("Algebra --- 4.6 --- 72h");
                             alunos.get(i).notas.add("logica 1 --- 7.6 --- 72h");
@@ -347,10 +347,10 @@ public class Menu {
                         }
                     }
                 } else if (x == 6) {
-                    System.out.print("Matrícula do aluno: ");
-                    int matricula = leitor.nextInt();
+                    System.out.println("Matrícula do aluno: ");
+                    int id = leitor.nextInt();
                     for (int i = 0; i < alunos.size(); i++) {
-                        if (alunos.get(i).matricula == matricula) {
+                        if (alunos.get(i).getMatricula()==id){
                             System.out.println("Histórico do aluno " + alunos.get(i).nome);
                             alunos.get(i).historicoAnalitico.add("Carga Horária Cumprida --- 720h");
                             alunos.get(i).historicoAnalitico.add("Coeficiente de Rendimento --- 82.48%");
@@ -371,11 +371,11 @@ public class Menu {
                     }
                 } else if (x == 7) {
                     System.out.print("Matrícula do aluno: ");
-                    int matricula = leitor.nextInt();
+                    int id = leitor.nextInt();
                     System.out.print("Insira o nome da disciplina: ");
                     String disciplina = leitor.next();
                     for (int i = 0; i < alunos.size(); i++) {
-                        if (alunos.get(i).matricula == matricula) {
+                        if (alunos.get(i).getMatricula()==id) {
                             alunos.get(i).disciplinasAtuais.add(disciplina);
                             System.out.println("Disciplina inserida com sucesso!");
                             break;
@@ -383,10 +383,10 @@ public class Menu {
                     }
                 }
                 else if (x == 8) { //listar disciplinas
-                    System.out.print("Matrícula do aluno: ");
-                    int matricula = leitor.nextInt();
+                    System.out.println("Matrícula do aluno: ");
+                    int id = leitor.nextInt();
                     for (int i = 0; i < alunos.size(); i++) {
-                        if (alunos.get(i).matricula == matricula) {
+                        if (alunos.get(i).getMatricula()==id){
                             alunos.get(i).printDisciplina();
                             break;
                         }
