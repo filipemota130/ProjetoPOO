@@ -331,7 +331,7 @@ public class Menu {
                         alunoT.setEmail(email);
                         System.out.println("Informação atualizada!\n");
                     } else if (aux == 2) {
-                        System.out.println("ALERTA: A matrícula do aluno ficará suspensa por 2 períodos.\nApós isso, caso não seja reaberta, o aluno será desligado do curso de forma definitiva.\nDeseja continuar(S/N)?");
+                        System.out.println("Deseja continuar(S/N)?");
                         String resp = leitor.next();
                         if (resp.equals("S") || resp.equals("s")) {
                             alunoT.setStatusCurso(false);
@@ -340,10 +340,10 @@ public class Menu {
                             System.out.println("Operação cancelada.\n");
                         }
                     } else if (aux == 3) {
-                        if (!alunoT.getStatusCurso()){
+                        if (alunoT.getStatusCurso()==false){
                             System.out.println("Bem vindo(a), novamente!\n");
+                            edit.setStatusCurso(false);
                             alunoT.setStatusCurso(true);
-                            continue;
                         }
                         System.out.println("Sua matricula nao está trancada\n");
                     }
