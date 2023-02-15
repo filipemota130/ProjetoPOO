@@ -301,7 +301,7 @@ public class Menu {
                         System.out.println("Informação atualizada!\n");
                     } else if (aux == 1) {
                         System.out.println("Digite o novo email: ");
-                        String email = leitor.nextLine();
+                        String email = leitor.next();
                         alunoT.setEmail(email);
                         System.out.println("Informação atualizada!\n");
                     }
