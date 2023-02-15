@@ -1,4 +1,5 @@
 package aluno;
+
 import java.util.ArrayList;
 
 public class Aluno {
@@ -11,6 +12,7 @@ public class Aluno {
     public ArrayList<String> notas = new ArrayList<String>();
     public ArrayList<String> historicoAnalitico = new ArrayList<String>();
     public ArrayList<String> disciplinasAtuais = new ArrayList<String>();
+    public boolean statusCurso = true;
 
     // Cadastrar informações dos alunosCadastrados.
     public Aluno(String nome, int matricula, String email, int cpf) {
@@ -25,7 +27,12 @@ public class Aluno {
         System.out.print("Nome: " + this.nome +
                 "\nMatrícula: " + this.matricula +
                 "\nCPF: " + this.cpf +
-                "\nE-mail: " + this.email+"\n");
+                "\nE-mail: " + this.email + "\n");
+        if (statusCurso == true) {
+            System.out.println("Status: Matriculado\n");
+        } else {
+            System.out.println("Status: Desligado\n");
+        }
     }
 
     // função boletim
@@ -74,13 +81,21 @@ public class Aluno {
     public void setNotas(String nota) {
         this.notas.add(nota);
     }
-    
+
+    public void setStatusCurso(boolean statusCurso) {
+        this.statusCurso = statusCurso;
+    }
+
+    public boolean getStatusCurso() {
+        return statusCurso;
+    }
+
     public void printHistorico() {
         for (int i = 0; i < historicoAnalitico.size(); i++) {
             System.out.println(historicoAnalitico.get(i));
         }
     }
-    
+
     public void printDisciplina() {
         if (disciplinasAtuais.isEmpty()) {
             System.out.println("O aluno não está matriculado em nenhuma disciplina.");

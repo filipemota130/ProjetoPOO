@@ -24,24 +24,32 @@ public class Menu {
                     alunos_removidos.add(alunos.get(alunos.size() - 1));
                     alunos.remove(alunos.size() - 1);
                     OP2.add("rm:aluno");
-                } else {
+                } else if (comando[1].equals("turma")){
                     turmas_removidas.add(turmas.get(turmas.size() - 1));
                     turmas.remove(turmas.size() - 1);
                     OP2.add("rm:turma");
                 }
+                else{
+
+                }
             } else if (comando[0].equals("rm")) {
                 if (comando[1].equals("prof")) {
-                    professores.add(professores_removidos.get(professores.size() - 1));
+                    professores.add(professores_removidos.get(professores_removidos.size() - 1));
                     professores_removidos.remove(professores.size() - 1);
                     OP2.add("add:prof");
                 } else if (comando[1].equals("aluno")) {
                     alunos.add(alunos_removidos.get(alunos_removidos.size() - 1));
                     alunos_removidos.remove(alunos_removidos.size() - 1);
                     OP2.add("add:aluno");
-                } else {
+                } else if (comando[1].equals("turma")) {
                     turmas.add(turmas_removidas.get(turmas_removidas.size() - 1));
                     turmas_removidas.remove(turmas_removidas.size() - 1);
-                    OP2.add("add:turmao");
+                    OP2.add("add:turma");
+                }
+                else{
+                    turmas.add(turmas_removidas.get(turmas_removidas.size() - 1));
+                    turmas_removidas.remove(turmas_removidas.size() - 1);
+                    OP2.add("add:mat");
                 }
             } else if (comando[0].equals("edit")) {
                 if (comando[1].equals("prof")) {
@@ -108,7 +116,7 @@ public class Menu {
                             }
                         }
                         turmas_pre_editadas.remove(turmas_pre_editadas.size() - 1);
-                        OP2.add("edit:aluno:redo");
+                        OP2.add("edit:turma:redo");
                     } else {
                         Turma buscador = turmas_editadas.get(turmas_editadas.size() - 1);
                         for (int i = 0; i < turmas.size(); i++) {
@@ -120,7 +128,7 @@ public class Menu {
                             }
                         }
                         turmas_editadas.remove(turmas_editadas.size() - 1);
-                        OP2.add("edit:aluno:undo");
+                        OP2.add("edit:turma:undo");
                     }
                 }
             }
@@ -146,50 +154,60 @@ public class Menu {
         ArrayList<Aluno> alunos_editados = new ArrayList<Aluno>();
         ArrayList<Turma> turmas_editadas = new ArrayList<Turma>();
 
-        Aluno alunoT = new Aluno("nome", 1, "email", 79589485);
+        Aluno alunoT = new Aluno("nome", 10, "email", 79589485);
         alunos.add(alunoT);
-        Professor prof1 = new Professor(01, "Badu", "123.456.789", "Doutor");
+        Professor prof1 = new Professor(10, "Badu", "123.456.789", "Doutor");
         Scanner leitor = new Scanner(System.in);
-        while (true) {
-            System.out.println("***********Deseja acessar*********");
+        while(true){
             System.out.println("[1] - Turmas");
             System.out.println("[2] - Professores");
             System.out.println("[3] - Alunos");
             System.out.println("[4] - Desfazer ultima ação");
             System.out.println("[5] - Resfazer ultima ação");
             System.out.println("[6] - Sair");
+            System.out.print("Selecione um dos comandos: ");
             int x = 0;
             x = leitor.nextInt();
             if (x == 2) { //PROFESSOR
-                System.out.println("***********Menu*********");
-                System.out.println("[0] - Adicionar novo professor");
-                System.out.println("[1] - editar informações");
-                System.out.println("[2] - exibir informações");
-                System.out.println("[3] - Remover professor");
+                System.out.println("[1] - Adicionar novo professor");
+                System.out.println("[2] - editar informações");
+                System.out.println("[3] - exibir informações");
+                System.out.println("[4] - Remover professor");
+                System.out.print("Selecione um dos comandos: ");
                 int option = leitor.nextInt();
 
-                if (option == 0) {//adicionar professor
-                    System.out.println("Digite o ID:\n>>");
+                if (option == 1) {//adicionar professor
+                    System.out.println("Digite o ID:");
                     int id = leitor.nextInt();
-
-                    System.out.println("Digite o Nome:\n>>");
+                    boolean check = false;
+                    for (int i =0; i<professores.size();i++){
+                        if(professores.get(i).getId() == id){
+                            System.out.println("Id já existente!!");
+                            check=true;
+                            break;
+                        }
+                    }
+                    if(check){
+                        continue;
+                    }
+                    System.out.println("Digite o Nome:");
                     String nome = leitor.next();
 
-                    System.out.println("Digite o CPF:\n>>");
+                    System.out.println("Digite o CPF:");
                     String cpf = leitor.next();
 
-                    System.out.println("Digite a Formação:\n>>");
+                    System.out.println("Digite a Formação:");
                     String formacao = leitor.next();
                     Professor newProf = new Professor(id, nome, cpf, formacao);
                     professores.add(newProf);
                     undoList.add("add:prof:undo");
                     newProf.printAtributos();
                 }
-                else if (option == 1) {/* editar infos */
+                else if (option == 2) {/* editar infos */
                     System.out.print("ID do professor: ");
-                    String nome = leitor.next();
+                    int id = leitor.nextInt();
                     for (int i = 0; i < professores.size(); i++) {
-                        if (professores.get(i).getNome().equals(nome)) {
+                        if (professores.get(i).getId()==id) {
                             prof1 = professores.get(i);
                             break;
                         }
@@ -215,7 +233,7 @@ public class Menu {
                     prof1.printAtributos();
 
 
-                } else if (option == 2) {/* ver infos */
+                } else if (option == 3) {/* ver infos */
                     System.out.print("ID do professor: ");
                     int id = leitor.nextInt();
                     for (int i = 0; i < professores.size(); i++) {
@@ -224,16 +242,16 @@ public class Menu {
                             break;
                         }
                     }
-                } else if (option == 3) {/* remover */
+                } else if (option == 4) {/* remover */
                     System.out.print("ID do professor: ");
-                    String nome = leitor.next();
+                    int id = leitor.nextInt();
                     for (int i = 0; i < professores.size(); i++) {
-                        if (professores.get(i).getNome().equals(nome)) {
-                            professores_removidos.add(professores.get(i));
+                        if (professores.get(i).getId()==id){
+                            Professor toBeRemoved = new Professor(professores.get(i).getId(),professores.get(i).getNome(), professores.get(i).getCpf(), professores.get(i).getFormacao());
+                            professores_removidos.add(toBeRemoved);
                             professores.remove(i);
-                            System.out.print("Professor removido");
+                            System.out.println("Professor removido.");
                             undoList.add("rm:prof:undo");
-                            System.out.print(undoList.size());
                             break;
                         }
                     }
@@ -269,10 +287,10 @@ public class Menu {
                     aluno1.printAluno();
                     undoList.add("add:aluno:undo");
                 } else if (x == 2) { // Remover
-                    System.out.println("nome do aluno: ");
-                    String nome = leitor.next();
+                    System.out.println("Matrícula do aluno: ");
+                    int id = leitor.nextInt();
                     for (int i = 0; i < alunos.size(); i++) {
-                        if (alunos.get(i).nome.equals(nome)) {
+                        if (alunos.get(i).getMatricula()==id){
                             alunos_removidos.add(alunos.get(i));
                             alunos.remove(i);
                             System.out.println("Aluno removido!\n");
@@ -281,18 +299,26 @@ public class Menu {
                         }
                     }
                 } else if (x == 3) { //Editar
-                    System.out.print("nome do aluno: ");
-                    String id = leitor.next();
+                    System.out.println("Matrícula do aluno: ");
+                    int id = leitor.nextInt();
+                    boolean check =false;
                     for (int i = 0; i < alunos.size(); i++) {
-                        if (alunos.get(i).nome.equals(id)) {
+                        if (alunos.get(i).getMatricula()==id){
                             alunoT = alunos.get(i);
+                            check=true;
                             break;
                         }
+                    }
+                    if (!check){
+                        System.out.println("Aluno inexistente.");
+                        continue;
                     }
                     Aluno edit = new Aluno(alunoT.getNome(), alunoT.getMatricula(), alunoT.getEmail(), alunoT.getCpf());
                     alunos_pre_editados.add(edit);
                     System.out.println("0 - Editar nome");
                     System.out.println("1 - Editar email");
+                    System.out.println("2 - Trancar curso");
+                    System.out.println("3 - Reabrir curso");
                     int aux = leitor.nextInt();
                     if (aux == 0) {
                         System.out.println("Digite o novo nome: ");
@@ -304,22 +330,38 @@ public class Menu {
                         String email = leitor.next();
                         alunoT.setEmail(email);
                         System.out.println("Informação atualizada!\n");
+                    } else if (aux == 2) {
+                        System.out.println("ALERTA: A matrícula do aluno ficará suspensa por 2 períodos.\nApós isso, caso não seja reaberta, o aluno será desligado do curso de forma definitiva.\nDeseja continuar(S/N)?");
+                        String resp = leitor.next();
+                        if (resp.equals("S") || resp.equals("s")) {
+                            alunoT.setStatusCurso(false);
+                            System.out.println("Informação atualizada!\n");
+                        } else {
+                            System.out.println("Operação cancelada.\n");
+                        }
+                    } else if (aux == 3) {
+                        if (!alunoT.getStatusCurso()){
+                            System.out.println("Bem vindo(a), novamente!\n");
+                            alunoT.setStatusCurso(true);
+                            continue;
+                        }
+                        System.out.println("Sua matricula nao está trancada\n");
                     }
                     undoList.add("edit:aluno:undo");
                 } else if (x == 4) {
-                    System.out.print("nome do aluno: ");
-                    String id = leitor.next();
+                    System.out.println("Matrícula do aluno: ");
+                    int id = leitor.nextInt();
                     for (int i = 0; i < alunos.size(); i++) {
-                        if (alunos.get(i).nome.equals(id)) {
+                        if (alunos.get(i).getMatricula()==id){
                             alunos.get(i).printAluno();
                             break;
                         }
                     }
                 } else if (x == 5) {
-                    System.out.print("Matrícula do aluno: ");
-                    int matricula = leitor.nextInt();
+                    System.out.println("Matrícula do aluno: ");
+                    int id = leitor.nextInt();
                     for (int i = 0; i < alunos.size(); i++) {
-                        if (alunos.get(i).matricula == matricula) {
+                        if (alunos.get(i).getMatricula()==id){
                             System.out.println("Boletim do aluno " + alunos.get(i).nome);
                             alunos.get(i).notas.add("Algebra --- 4.6 --- 72h");
                             alunos.get(i).notas.add("logica 1 --- 7.6 --- 72h");
@@ -332,10 +374,10 @@ public class Menu {
                         }
                     }
                 } else if (x == 6) {
-                    System.out.print("Matrícula do aluno: ");
-                    int matricula = leitor.nextInt();
+                    System.out.println("Matrícula do aluno: ");
+                    int id = leitor.nextInt();
                     for (int i = 0; i < alunos.size(); i++) {
-                        if (alunos.get(i).matricula == matricula) {
+                        if (alunos.get(i).getMatricula()==id){
                             System.out.println("Histórico do aluno " + alunos.get(i).nome);
                             alunos.get(i).historicoAnalitico.add("Carga Horária Cumprida --- 720h");
                             alunos.get(i).historicoAnalitico.add("Coeficiente de Rendimento --- 82.48%");
@@ -354,31 +396,34 @@ public class Menu {
                             break;
                         }
                     }
-                } else if (x == 7) {
+                } else if (x == 7) { //Matricula
                     System.out.print("Matrícula do aluno: ");
-                    int matricula = leitor.nextInt();
+                    int id = leitor.nextInt();
                     System.out.print("Insira o nome da disciplina: ");
                     String disciplina = leitor.next();
                     for (int i = 0; i < alunos.size(); i++) {
-                        if (alunos.get(i).matricula == matricula) {
+                        if (alunos.get(i).getMatricula()==id) {
+                            Aluno aluno_pre = new Aluno(alunos.get(i).getNome(), alunos.get(i).getMatricula(), alunos.get(i).getEmail(), alunos.get(i).getCpf());
+                            alunos_pre_editados.add(aluno_pre);
                             alunos.get(i).disciplinasAtuais.add(disciplina);
+                            undoList.add("edit:aluno:undo");
                             System.out.println("Disciplina inserida com sucesso!");
                             break;
                         }
                     }
                 }
                 else if (x == 8) { //listar disciplinas
-                    System.out.print("Matrícula do aluno: ");
-                    int matricula = leitor.nextInt();
+                    System.out.println("Matrícula do aluno: ");
+                    int id = leitor.nextInt();
                     for (int i = 0; i < alunos.size(); i++) {
-                        if (alunos.get(i).matricula == matricula) {
+                        if (alunos.get(i).getMatricula()==id){
                             alunos.get(i).printDisciplina();
                             break;
                         }
                     }
                 }
                 else if (x == 9) {
-                    System.out.println("volte sempre!");
+                    continue;
                 }
                 else {
                     System.out.println("Opção não reconhecida, tente novamente.");
@@ -436,7 +481,7 @@ public class Menu {
                     Turma turma1 = new Turma(id, disciplina, dias, horarios, professor, alunos1);
                     undoList.add("add:turma:undo");
                     turmas.add(turma1);
-                    System.out.print("Turma adicionada!");
+                    System.out.println("Turma adicionada!\n");
                 } else if (input.equals("2")) {
                     ArrayList<String> dias1 = new ArrayList<String>();
                     ArrayList<String> horarios1 = new ArrayList<String>();
@@ -450,9 +495,11 @@ public class Menu {
                             turmateste = turmas.get(i);
                             ne = true;
                             break;
-                        } else if (ne == false) {
-                            System.out.println("A turma informada não existe no sistema.\n");
                         }
+                    }
+                    if (ne == false) {
+                        System.out.println("A turma informada não existe no sistema.\n");
+                        continue;
                     }
                     Turma turmaUndo = new Turma(turmateste.getId(),turmateste.getDisciplina(), turmateste.getDias(),turmateste.getHorarios(), turmateste.getProfessor(), turmateste.getAlunos());
                     turmas_pre_editadas.add(turmaUndo);
@@ -538,6 +585,7 @@ public class Menu {
                     for (int i = 0; i < turmas.size(); i++) {
                         System.out.printf("[%s] - %s\n", turmas.get(i).getId(), turmas.get(i).getDisciplina());
                     }
+                    System.out.println("\n");
                 } else {
                     System.out.print("\nInput inválido.\n");
                 }
