@@ -244,6 +244,10 @@ public class Menu {
                 System.out.println("[3] - Editar dados do Aluno");
                 System.out.println("[4] - Ver informações do Aluno");
                 System.out.println("[5] - Gerar Boletim");
+                System.out.println("[6] - Gerar Histórico Analítico");
+                System.out.println("[7] - Matricular aluno em disciplina");
+                System.out.println("[8] - Listar disciplinas");
+                System.out.println("[9] - Sair");
                 x = leitor.nextInt();
 
                 if (x == 1) { //Adicionar
@@ -312,22 +316,71 @@ public class Menu {
                         }
                     }
                 } else if (x == 5) {
-                    System.out.println("Insira o nome do aluno desejado: ");
-                    String aluno_name = leitor.next();
+                    System.out.print("Matrícula do aluno: ");
+                    int matricula = leitor.nextInt();
                     for (int i = 0; i < alunos.size(); i++) {
-                        if (alunos.get(i).nome.equals(aluno_name)) {
+                        if (alunos.get(i).matricula == matricula) {
                             System.out.println("Boletim do aluno " + alunos.get(i).nome);
-                            alunos.get(i).setNotas("Algebra --- 4.6");
-                            alunos.get(i).setNotas("logica 1 --- 7.6");
-                            alunos.get(i).setNotas("Programacao 1 --- 8.6");
-                            alunos.get(i).setNotas("Teoria da Computacao --- 9.6");
-                            alunos.get(i).setNotas("Sistemas de Informacao --- 10.0");
-                            alunos.get(i).setNotas("Calculo3 --- 5.6");
+                            alunos.get(i).notas.add("Algebra --- 4.6 --- 72h");
+                            alunos.get(i).notas.add("logica 1 --- 7.6 --- 72h");
+                            alunos.get(i).notas.add("Programacao 1 --- 8.6 --- 144h");
+                            alunos.get(i).notas.add("Teoria da Computacao --- 9.6 --- 72h");
+                            alunos.get(i).notas.add("Sistemas de Informacao --- 10.0 --- 72h");
+                            alunos.get(i).notas.add("Calculo3 --- 5.6 --- 72h");
                             alunos.get(i).printBoletim();
                             break;
                         }
                     }
-                } else {
+                } else if (x == 6) {
+                    System.out.print("Matrícula do aluno: ");
+                    int matricula = leitor.nextInt();
+                    for (int i = 0; i < alunos.size(); i++) {
+                        if (alunos.get(i).matricula == matricula) {
+                            System.out.println("Histórico do aluno " + alunos.get(i).nome);
+                            alunos.get(i).historicoAnalitico.add("Carga Horária Cumprida --- 720h");
+                            alunos.get(i).historicoAnalitico.add("Coeficiente de Rendimento --- 82.48%");
+                            alunos.get(i).historicoAnalitico.add("1º período --- Programação 1 --- 7.3 --- AP");
+                            alunos.get(i).historicoAnalitico
+                                    .add("1º período --- Matemática Discreta --- 9.4 --- AP");
+                            alunos.get(i).historicoAnalitico.add("2º período --- Banco de Dados --- 10 --- AP");
+                            alunos.get(i).historicoAnalitico
+                                    .add("2º período --- Estrutura de Dados --- 9.4 --- AP");
+                            alunos.get(i).historicoAnalitico.add("3º período --- Àlgebra Linear --- 5.7 --- AP");
+                            alunos.get(i).historicoAnalitico
+                                    .add("3º período --- Teoria dos Grafos --- 3.1 --- REP");
+                            alunos.get(i).historicoAnalitico
+                                    .add("Eletiva --- Sistemas Distribídos --- 9.2 --- AP");
+                            alunos.get(i).printHistorico();
+                            break;
+                        }
+                    }
+                } else if (x == 7) {
+                    System.out.print("Matrícula do aluno: ");
+                    int matricula = leitor.nextInt();
+                    System.out.print("Insira o nome da disciplina: ");
+                    String disciplina = leitor.next();
+                    for (int i = 0; i < alunos.size(); i++) {
+                        if (alunos.get(i).matricula == matricula) {
+                            alunos.get(i).disciplinasAtuais.add(disciplina);
+                            System.out.println("Disciplina inserida com sucesso!");
+                            break;
+                        }
+                    }
+                }
+                else if (x == 8) { //listar disciplinas
+                    System.out.print("Matrícula do aluno: ");
+                    int matricula = leitor.nextInt();
+                    for (int i = 0; i < alunos.size(); i++) {
+                        if (alunos.get(i).matricula == matricula) {
+                            alunos.get(i).printDisciplina();
+                            break;
+                        }
+                    }
+                }
+                else if (x == 9) {
+                    System.out.println("volte sempre!");
+                }
+                else {
                     System.out.println("Opção não reconhecida, tente novamente.");
                 }
             } else if (x == 1) { // TURMA
