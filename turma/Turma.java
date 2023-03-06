@@ -1,47 +1,30 @@
 package turma;
 import java.util.ArrayList;
-public class Turma 
-{
-    String id;
-    String disciplina;
-    ArrayList<String> dias;
-    ArrayList<String> horarios;
-    String professor;
-    ArrayList<String> alunos;
 
-    public Turma(String id, String disciplina, ArrayList<String> dias, ArrayList<String> horarios, String professor,
+import modelo.Modelo;
+
+public class Turma extends Modelo {
+    private ArrayList<String> dias;
+    private ArrayList<String> horarios;
+    private String professor;
+    private ArrayList<String> alunos;
+
+    public Turma(int id, String nome, ArrayList<String> dias, ArrayList<String> horarios, String professor,
             ArrayList<String> alunos) {
-        this.id = id;
-        this.disciplina = disciplina;
+        super(id,nome);
         this.dias = dias;
         this.horarios = horarios;
         this.professor = professor;
         this.alunos = alunos;
-
     }
-    public void printTurma() {
-       System.out.println( "ID: " + this.id +
-                "\nDisciplina: " + this.disciplina +
+
+    public void Ver_info() {
+        System.out.println("ID: " + getId() +
+                "\nDisciplina: " + getNome() +
                 "\ndias: " + this.dias +
                 "\nhorários: " + this.horarios +
                 "\nprofessor: " + this.professor +
-               "\nalunos: " + this.alunos);
-    }
-
-    public void setId(String id) {
-        this.id = id;
-    }
-
-    public String getId() {
-        return this.id;
-    }
-
-    public void setDisciplina(String disciplina) {
-        this.disciplina = disciplina;
-    }
-
-    public String getDisciplina() {
-        return this.disciplina;
+                "\nalunos: " + this.alunos);
     }
 
     public void setDias(ArrayList<String> dias) {

@@ -1,33 +1,16 @@
 package professor;
-public class Professor {
 
-    int id;
-    String nome;
-    String cpf;
-    String formacao;
+import modelo.Modelo;
+
+public class Professor extends Modelo {
+
+    private String cpf;
+    private String formacao;
 
     public Professor(int id, String nome, String cpf, String formacao) {
-        this.id = id;
-        this.nome = nome;
+        super(id, nome);
         this.cpf = cpf;
         this.formacao = formacao;
-    }
-
-    public void setId(int id) {
-        this.id = id;
-    }
-
-    public int getId() {
-        return this.id;
-    }
-
-    public void setNome(String nome) {
-
-        this.nome = nome;
-    }
-
-    public String getNome() {
-        return this.nome;
     }
 
     public void setCpf(String cpf) {
@@ -46,10 +29,11 @@ public class Professor {
         return this.formacao;
     }
 
-    public void printAtributos() {
-        System.out.printf("\nID: %d\n", this.getId());
-        System.out.printf("Nome: %s\n", this.getNome());
-        System.out.printf("CPF: %s\n", this.getCpf());
-        System.out.printf("Formação: %s\n\n", this.getFormacao());
+    public void Ver_info() {
+        System.out.printf("\nID: %d\n", getId());
+        System.out.printf("Nome: %s\n", getNome());
+        System.out.printf("CPF: %s\n", getCpf());
+        System.out.printf("Formação: %s\n\n", getFormacao());
     }
+
 }
