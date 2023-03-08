@@ -29,9 +29,9 @@ public class Aluno extends Modelo{
                 "\nCPF: " + this.cpf +
                 "\nE-mail: " + this.email + "\n");
         if (statusCurso == true) {
-            System.out.println("Status: Matriculado\n");
+            System.out.println("Status: Ativo\n");
         } else {
-            System.out.println("Status: Desligado\n");
+            System.out.println("Status: Trancado\n");
         }
     }
 

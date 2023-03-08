@@ -1,6 +1,6 @@
 package modelo;
 
-public abstract class Modelo {
+public abstract class Modelo implements Cloneable{
     
     private int id;
     private String nome;
@@ -27,5 +27,10 @@ public abstract class Modelo {
     }
 
     public abstract void Ver_info();
+
+    @Override
+    public Modelo clone() throws CloneNotSupportedException {
+        return (Modelo) super.clone();
+    }
 
 }

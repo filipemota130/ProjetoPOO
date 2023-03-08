@@ -4,20 +4,20 @@ import modelo.Modelo;
 
 public class Professor extends Modelo {
 
-    private String cpf;
+    private int cpf;
     private String formacao;
 
-    public Professor(int id, String nome, String cpf, String formacao) {
+    public Professor(int id, String nome, int cpf, String formacao) {
         super(id, nome);
         this.cpf = cpf;
         this.formacao = formacao;
     }
 
-    public void setCpf(String cpf) {
+    public void setCpf(int cpf) {
         this.cpf = cpf;
     }
 
-    public String getCpf() {
+    public int getCpf() {
         return this.cpf;
     }
 

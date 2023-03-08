@@ -58,4 +58,9 @@ public class Turma extends Modelo {
     public ArrayList<String> getAlunos() {
         return this.alunos;
     }
+
+    @Override
+    public Turma clone() throws CloneNotSupportedException {
+        return (Turma) super.clone();
+    }
 }

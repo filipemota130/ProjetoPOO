@@ -1,162 +1,206 @@
 package menu;
 
-import professor.Professor;
-import turma.Turma;
 import java.util.ArrayList;
 import java.util.Scanner;
+
+import professor.Professor;
+import turma.Turma;
 import aluno.Aluno;
+import modelo.Modelo;
 
 public class Menu {
-    public void undoRedo(ArrayList<String> OP1, ArrayList<String> OP2, ArrayList<Professor> professores,
-            ArrayList<Professor> professores_removidos, ArrayList<Professor> professores_pre_editados,
-            ArrayList<Professor> professores_editados, ArrayList<Aluno> alunos, ArrayList<Aluno> alunos_removidos,
-            ArrayList<Aluno> alunos_pre_editados, ArrayList<Aluno> alunos_editados, ArrayList<Turma> turmas,
-            ArrayList<Turma> turmas_removidas, ArrayList<Turma> turmas_pre_editadas, ArrayList<Turma> turmas_editadas) {
+    public void undoRedo(ArrayList<String> OP1, ArrayList<String> OP2, ArrayList<Modelo> entidades,
+            ArrayList<Modelo> entidades_removidas, ArrayList<Modelo> entidades_pre_edicao,
+            ArrayList<Modelo> entidades_editadas) {
 
         String operation = OP1.get(OP1.size() - 1);
         String[] comando = operation.split(":");
         if (comando[0].equals("add")) {
-            if (comando[1].equals("prof")) {
-                professores_removidos.add(professores.get(professores.size() - 1));
-                professores.remove(professores.size() - 1);
-                OP2.add("rm:prof");
-            } else if (comando[1].equals("aluno")) {
-                alunos_removidos.add(alunos.get(alunos.size() - 1));
-                alunos.remove(alunos.size() - 1);
-                OP2.add("rm:aluno");
-            } else if (comando[1].equals("turma")) {
-                turmas_removidas.add(turmas.get(turmas.size() - 1));
-                turmas.remove(turmas.size() - 1);
-                OP2.add("rm:turma");
-            } else {
-
+            for (int i = entidades.size() - 1; i >= 0; i--) {
+                if (comando[1].equals("prof")) {
+                    if (entidades.get(i) instanceof Professor) {
+                        entidades_removidas.add(entidades.get(i));
+                        entidades.remove(i);
+                        OP2.add("rm:prof");
+                        break;
+                    }
+                } else if (comando[1].equals("aluno")) {
+                    if (entidades.get(i) instanceof Aluno) {
+                        entidades_removidas.add(entidades.get(i));
+                        entidades.remove(i);
+                        OP2.add("rm:aluno");
+                        break;
+                    }
+                } else if (comando[1].equals("turma")) {
+                    if (entidades.get(i) instanceof Turma) {
+                        entidades_removidas.add(entidades.get(i));
+                        entidades.remove(i);
+                        OP2.add("rm:turma");
+                        break;
+                    }
+                }
             }
         } else if (comando[0].equals("rm")) {
-            if (comando[1].equals("prof")) {
-                professores.add(professores_removidos.get(professores_removidos.size() - 1));
-                professores_removidos.remove(professores_removidos.size() - 1);
-                OP2.add("add:prof");
-            } else if (comando[1].equals("aluno")) {
-                alunos.add(alunos_removidos.get(alunos_removidos.size() - 1));
-                alunos_removidos.remove(alunos_removidos.size() - 1);
-                OP2.add("add:aluno");
-            } else if (comando[1].equals("turma")) {
-                turmas.add(turmas_removidas.get(turmas_removidas.size() - 1));
-                turmas_removidas.remove(turmas_removidas.size() - 1);
-                OP2.add("add:turma");
-            } else {
-                turmas.add(turmas_removidas.get(turmas_removidas.size() - 1));
-                turmas_removidas.remove(turmas_removidas.size() - 1);
-                OP2.add("add:mat");
+            for (int i = entidades_removidas.size() - 1; i >= 0; i--) {
+                if (comando[1].equals("prof")) {
+                    if (entidades_removidas.get(i) instanceof Professor) {
+                        entidades.add(entidades_removidas.get(i));
+                        entidades_removidas.remove(i);
+                        OP2.add("add:prof");
+                        break;
+                    }
+                } else if (comando[1].equals("aluno")) {
+                    if (entidades_removidas.get(i) instanceof Aluno) {
+                        entidades.add(entidades_removidas.get(i));
+                        entidades_removidas.remove(i);
+                        OP2.add("add:aluno");
+                        break;
+                    }
+                } else if (comando[1].equals("turma")) {
+                    if (entidades_removidas.get(i) instanceof Turma) {
+                        entidades.add(entidades_removidas.get(i));
+                        entidades_removidas.remove(i);
+                        OP2.add("add:turma");
+                        break;
+                    }
+                }
             }
         } else if (comando[0].equals("edit")) {
             if (comando[1].equals("prof")) {
                 if (comando[2].equals("undo")) {
-                    Professor buscador = professores_pre_editados.get(professores_pre_editados.size() - 1);
-                    for (int i = 0; i < professores.size(); i++) {
-                        if (professores.get(i).getId() == (buscador.getId())) {
-                            professores_editados.add(professores.get(i));
-                            professores.remove(i);
-                            professores.add(buscador);
+                    for (int i = entidades_pre_edicao.size() - 1; i >= 0; i--) {
+                        if (entidades_pre_edicao.get(i) instanceof Professor) {
+                            Professor buscador = (Professor) entidades_pre_edicao.get(i);
+                            for (int j = 0; j < entidades.size(); j++) {
+                                if (entidades.get(j).getId() == buscador.getId()
+                                        && (entidades.get(j) instanceof Professor)) {
+                                    entidades_editadas.add(entidades.get(i));
+                                    entidades.remove(i);
+                                    entidades.add(buscador);
+                                    OP2.add("edit:prof:redo");
+                                    break;
+                                }
+                            }
+                            entidades_pre_edicao.remove(buscador);
                             break;
                         }
                     }
-                    professores_pre_editados.remove(professores_pre_editados.size() - 1);
-                    OP2.add("edit:prof:redo");
                 } else {
-                    Professor buscador = professores_editados.get(professores_editados.size() - 1);
-                    for (int i = 0; i < professores.size(); i++) {
-                        if (professores.get(i).getId() == (buscador.getId())) {
-                            professores_pre_editados.add(professores.get(i));
-                            professores.remove(i);
-                            professores.add(buscador);
+                    for (int i = entidades_editadas.size() - 1; i >= 0; i--) {
+                        if (entidades_editadas.get(i) instanceof Professor) {
+                            Professor buscador = (Professor) entidades_editadas.get(i);
+                            for (int j = 0; j < entidades.size(); j++) {
+                                if (entidades.get(j).getId() == buscador.getId()
+                                        && (entidades.get(j) instanceof Professor)) {
+                                    entidades_pre_edicao.add(entidades.get(i));
+                                    entidades.remove(i);
+                                    entidades.add(buscador);
+                                    OP2.add("edit:prof:undo");
+                                    break;
+                                }
+                            }
+                            entidades_editadas.remove(buscador);
                             break;
                         }
                     }
-                    professores_editados.remove(professores_editados.size() - 1);
-                    OP2.add("edit:prof:undo");
                 }
             } else if (comando[1].equals("aluno")) {
                 if (comando[2].equals("undo")) {
-                    Aluno buscador = alunos_pre_editados.get(alunos_pre_editados.size() - 1);
-                    for (int i = 0; i < alunos.size(); i++) {
-                        if (alunos.get(i).getMatricula() == (buscador.getMatricula())) {
-                            alunos_editados.add(alunos.get(i));
-                            alunos.remove(i);
-                            alunos.add(buscador);
+                    for (int i = entidades_pre_edicao.size() - 1; i >= 0; i--) {
+                        if (entidades_pre_edicao.get(i) instanceof Aluno) {
+                            Aluno buscador = (Aluno) entidades_pre_edicao.get(i);
+                            for (int j = 0; j < entidades.size(); j++) {
+                                if (entidades.get(j).getId() == buscador.getId()
+                                        && (entidades.get(j) instanceof Aluno)) {
+                                    entidades_editadas.add(entidades.get(i));
+                                    entidades.remove(i);
+                                    entidades.add(buscador);
+                                    OP2.add("edit:aluno:redo");
+                                    break;
+                                }
+                            }
+                            entidades_pre_edicao.remove(buscador);
                             break;
                         }
                     }
-                    alunos_pre_editados.remove(alunos_pre_editados.size() - 1);
-                    OP2.add("edit:aluno:redo");
                 } else {
-                    Aluno buscador = alunos_editados.get(alunos_editados.size() - 1);
-                    for (int i = 0; i < alunos.size(); i++) {
-                        if (alunos.get(i).getMatricula() == (buscador.getMatricula())) {
-                            alunos_pre_editados.add(alunos.get(i));
-                            alunos.remove(i);
-                            alunos.add(buscador);
+                    for (int i = entidades_editadas.size() - 1; i >= 0; i--) {
+                        if (entidades_editadas.get(i) instanceof Aluno) {
+                            Aluno buscador = (Aluno) entidades_editadas.get(i);
+                            for (int j = 0; j < entidades.size(); j++) {
+                                if (entidades.get(j).getId() == buscador.getId()
+                                        && (entidades.get(j) instanceof Aluno)) {
+                                    entidades_pre_edicao.add(entidades.get(i));
+                                    entidades.remove(i);
+                                    entidades.add(buscador);
+                                    OP2.add("edit:aluno:undo");
+                                    break;
+                                }
+                            }
+                            entidades_editadas.remove(buscador);
                             break;
                         }
                     }
-                    alunos_editados.remove(alunos_editados.size() - 1);
-                    OP2.add("edit:aluno:undo");
                 }
             } else {
                 if (comando[2].equals("undo")) {
-                    Turma buscador = turmas_pre_editadas.get(turmas_pre_editadas.size() - 1);
-                    for (int i = 0; i < turmas.size(); i++) {
-                        if (turmas.get(i).getId() == (buscador.getId())) {
-                            turmas_editadas.add(turmas.get(i));
-                            turmas.remove(i);
-                            turmas.add(buscador);
+                    for (int i = entidades_pre_edicao.size() - 1; i >= 0; i--) {
+                        if (entidades_pre_edicao.get(i) instanceof Aluno) {
+                            Aluno buscador = (Aluno) entidades_pre_edicao.get(i);
+                            for (int j = 0; j < entidades.size(); j++) {
+                                if (entidades.get(j).getId() == buscador.getId()
+                                        && (entidades.get(j) instanceof Aluno)) {
+                                    entidades_editadas.add(entidades.get(i));
+                                    entidades.remove(i);
+                                    entidades.add(buscador);
+                                    OP2.add("edit:aluno:redo");
+                                    break;
+                                }
+                            }
+                            entidades_pre_edicao.remove(buscador);
                             break;
                         }
                     }
-                    turmas_pre_editadas.remove(turmas_pre_editadas.size() - 1);
-                    OP2.add("edit:turma:redo");
                 } else {
-                    Turma buscador = turmas_editadas.get(turmas_editadas.size() - 1);
-                    for (int i = 0; i < turmas.size(); i++) {
-                        if (turmas.get(i).getId() == (buscador.getId())) {
-                            turmas_pre_editadas.add(turmas.get(i));
-                            turmas.remove(i);
-                            turmas.add(buscador);
+                    for (int i = entidades_editadas.size() - 1; i >= 0; i--) {
+                        if (entidades_editadas.get(i) instanceof Turma) {
+                            Turma buscador = (Turma) entidades_editadas.get(i);
+                            for (int j = 0; j < entidades.size(); j++) {
+                                if (entidades.get(j).getId() == buscador.getId()
+                                        && (entidades.get(j) instanceof Turma)) {
+                                    entidades_pre_edicao.add(entidades.get(i));
+                                    entidades.remove(i);
+                                    entidades.add(buscador);
+                                    OP2.add("edit:turma:undo");
+                                    break;
+                                }
+                            }
+                            entidades_editadas.remove(buscador);
                             break;
                         }
                     }
-                    turmas_editadas.remove(turmas_editadas.size() - 1);
-                    OP2.add("edit:turma:undo");
                 }
             }
         }
         OP1.remove(OP1.size() - 1);
     }
-
-    public static void main(String args[]) {
+    
+    public static void main(String args[]) throws CloneNotSupportedException {
         ArrayList<String> undoList = new ArrayList<String>();
         ArrayList<String> redoList = new ArrayList<String>();
 
-        ArrayList<Turma> turmas = new ArrayList<Turma>();
-        ArrayList<Professor> professores = new ArrayList<Professor>();
-        ArrayList<Aluno> alunos = new ArrayList<Aluno>();
-
-        ArrayList<Professor> professores_removidos = new ArrayList<Professor>();
-        ArrayList<Aluno> alunos_removidos = new ArrayList<Aluno>();
-        ArrayList<Turma> turmas_removidas = new ArrayList<Turma>();
-
-        ArrayList<Professor> professores_pre_editados = new ArrayList<Professor>();
-        ArrayList<Aluno> alunos_pre_editados = new ArrayList<Aluno>();
-        ArrayList<Turma> turmas_pre_editadas = new ArrayList<Turma>();
-
-        ArrayList<Professor> professores_editados = new ArrayList<Professor>();
-        ArrayList<Aluno> alunos_editados = new ArrayList<Aluno>();
-        ArrayList<Turma> turmas_editadas = new ArrayList<Turma>();
-
-        Aluno alunoT = new Aluno(1, "nome", 10, "email", 79589485);
-        alunos.add(alunoT);
-        Professor prof1 = new Professor(10, "Badu", "123.456.789", "Doutor");
+        ArrayList<Modelo> entidades = new ArrayList<Modelo>();
+        ArrayList<Modelo> entidades_pre_edicao = new ArrayList<Modelo>();
+        ArrayList<Modelo> entidades_editadas = new ArrayList<Modelo>();
+        ArrayList<Modelo> entidades_removidas = new ArrayList<Modelo>();
+        /* 
+        Aluno alunoT = new Aluno(10, "nome", 10, "email", 79589485);
+        entidades.add(alunoT);
+        Professor prof1 = new Professor(123456789, "Badu", 123456789, "Doutor");
+        entidades.add(prof1);
+        */
         Scanner leitor = new Scanner(System.in);
+
         while (true) {
             System.out.println("[1] - Turmas");
             System.out.println("[2] - Professores");
@@ -167,7 +211,11 @@ public class Menu {
             System.out.print("Selecione um dos comandos: ");
             int x = 0;
             x = leitor.nextInt();
-            if (x == 2) { // PROFESSOR
+
+            // PROFESSOR
+            if (x == 2) {
+                int id;
+                Professor profExample = new Professor(0, null, 1, null);
                 System.out.println("[1] - Adicionar novo professor");
                 System.out.println("[2] - editar informações");
                 System.out.println("[3] - exibir informações");
@@ -176,12 +224,17 @@ public class Menu {
 
                 int option = leitor.nextInt();
 
-                if (option == 1) {// adicionar professor
-                    System.out.println("Digite o ID:");
-                    int id = leitor.nextInt();
+                // adicionar professor
+                if (option == 1) {
+                    String nome;
+                    int cpf;
+                    String formacao;
+                    System.out.println("Digite o CPF (11 digitos):");
+                    cpf = leitor.nextInt();
+                    leitor.nextLine();
                     boolean check = false;
-                    for (int i = 0; i < professores.size(); i++) {
-                        if (professores.get(i).getId() == id) {
+                    for (int i = 0; i < entidades.size(); i++) {
+                        if (entidades.get(i).getId() == cpf) {
                             System.out.println("Id já existente!!");
                             check = true;
                             break;
@@ -191,71 +244,107 @@ public class Menu {
                         continue;
                     }
                     System.out.println("Digite o Nome:");
-                    String nome = leitor.next();
-
-                    System.out.println("Digite o CPF:");
-                    String cpf = leitor.next();
+                    nome = leitor.nextLine();
 
                     System.out.println("Digite a Formação:");
-                    String formacao = leitor.next();
-                    Professor newProf = new Professor(id, nome, cpf, formacao);
-                    professores.add(newProf);
+                    formacao = leitor.nextLine();
+
+                    Professor newProf = new Professor(cpf, nome, cpf, formacao);
+                    entidades.add(newProf);
                     undoList.add("add:prof:undo");
                     newProf.Ver_info();
-                } else if (option == 2) {/* editar infos */
-                    System.out.print("ID do professor: ");
-                    int id = leitor.nextInt();
-                    for (int i = 0; i < professores.size(); i++) {
-                        if (professores.get(i).getId() == id) {
-                            prof1 = professores.get(i);
-                            break;
+                }
+
+                //editar infos
+                else if (option == 2) {
+                    String nome;
+                    int choice;
+                    String formacao;
+                    Boolean check = false;
+                    System.out.print("Digite o ID do professor: ");
+                    id = leitor.nextInt();
+
+                    for (int i = 0; i < entidades.size(); i++) {
+                        if (entidades.get(i) instanceof Professor) {
+                            if (entidades.get(i).getId() == id) {
+                                profExample = (Professor) entidades.get(i);
+                                check = true;
+                                break;
+                            }
                         }
+                    }
+                    if (!check) {
+                        System.out.println("o professor não existe!!");
                     }
                     System.out.println("Qual informação deseja editar?\n");
                     System.out.println("[1] - Nome");
                     System.out.println("[2] - CPF");
                     System.out.println("[3] - Formação\n>>");
                     option = leitor.nextInt();
-                    Professor edit = new Professor(prof1.getId(), prof1.getNome(), prof1.getCpf(), prof1.getFormacao());
-                    professores_pre_editados.add(edit);
+
+                    entidades_pre_edicao.add(profExample.clone());
+
                     if (option == 1) {
                         System.out.println("Digite o novo Nome:\n>>");
-                        prof1.setNome(leitor.next());
+                        nome = leitor.next();
+                        profExample.setNome(nome);
                     } else if (option == 2) {
                         System.out.println("Digite o novo CPF:\n>>");
-                        prof1.setCpf(leitor.next());
+                        choice = leitor.nextInt();
+                        profExample.setCpf(choice);
+                        profExample.setId(choice);
                     } else if (option == 3) {
                         System.out.println("Digite a nova formação:\n>>");
-                        prof1.setFormacao(leitor.next());
+                        formacao = leitor.next();
+                        profExample.setFormacao(formacao);
                     }
                     undoList.add("edit:prof:undo");
-                    prof1.Ver_info();
-                } else if (option == 3) {/* ver infos */
-                    System.out.print("ID do professor: ");
-                    int id = leitor.nextInt();
-                    for (int i = 0; i < professores.size(); i++) {
-                        if (professores.get(i).getId() == id) {
-                            professores.get(i).Ver_info();
-                            break;
+                    profExample.Ver_info();
+                }
+
+                //ver infos
+                else if (option == 3) {
+                    System.out.print("Digite o CPF do professor: ");
+                    id = leitor.nextInt();
+                    boolean check = false;
+                    for (int i = 0; i < entidades.size(); i++) {
+                        if (entidades.get(i) instanceof Professor) {
+                            if (entidades.get(i).getId() == id) {
+                                check = true;
+                                profExample = (Professor) entidades.get(i);
+                                profExample.Ver_info();
+                                break;
+                            }
                         }
                     }
-                } else if (option == 4) {/* remover */
-                    System.out.print("ID do professor: ");
-                    int id = leitor.nextInt();
-                    for (int i = 0; i < professores.size(); i++) {
-                        if (professores.get(i).getId() == id) {
-                            Professor toBeRemoved = new Professor(professores.get(i).getId(),
-                                    professores.get(i).getNome(), professores.get(i).getCpf(),
-                                    professores.get(i).getFormacao());
-                            professores_removidos.add(toBeRemoved);
-                            professores.remove(i);
-                            System.out.println("Professor removido.");
-                            undoList.add("rm:prof:undo");
-                            break;
+                    if (!check) {
+                        System.out.println("Professor não encontrado!!\n");
+                    }
+                }
+
+                //Remover Professor
+                else if (option == 4) {
+                    System.out.print("Digite o CPF do professor: ");
+                    id = leitor.nextInt();
+                    for (int i = 0; i < entidades.size(); i++) {
+                        if (entidades.get(i) instanceof Professor) {
+                            if (entidades.get(i).getId() == id) {
+                                profExample = (Professor) entidades.get(i);
+                                entidades_removidas.add(profExample.clone());
+                                entidades.remove(i);
+                                System.out.println("Professor removido.");
+                                undoList.add("rm:prof:undo");
+                                break;
+                            }
                         }
                     }
                 }
-            } else if (x == 3) { // ALUNO
+            }
+
+            // ALUNO
+            else if (x == 3) {
+                int id;
+                Aluno alunoExample = new Aluno(0, null, 1, null, 0);
                 System.out.println("\n[1] - Cadastrar Aluno");
                 System.out.println("[2] - Remover Aluno");
                 System.out.println("[3] - Editar dados do Aluno");
@@ -266,154 +355,197 @@ public class Menu {
                 System.out.println("[8] - Listar disciplinas");
                 System.out.println("[9] - Sair");
                 x = leitor.nextInt();
+                leitor.nextLine();
 
-                if (x == 1) { // Adicionar
-                    System.out.println("Nome: ");
-                    String nome = leitor.next();
+                // Adicionar
+                if (x == 1) {
+                    String nome;
+                    int matricula;
+                    int cpf;
+                    String email;
+
+                    System.out.print("Nome: ");
+                    nome = leitor.nextLine();
 
                     System.out.println("Matrícula: ");
-                    int matricula = leitor.nextInt();
+                    matricula = leitor.nextInt();
 
                     System.out.println("CPF: ");
-                    int cpf = leitor.nextInt();
+                    cpf = leitor.nextInt();
+                    leitor.nextLine();
 
                     System.out.println("Email: ");
-                    String email = leitor.next();
+                    email = leitor.nextLine();
 
-                    //TODO : ADICIONAR ID INCREMENTAVEL
-                    Aluno aluno1 = new Aluno(1, nome, matricula, email, cpf);
-                    alunos.add(aluno1);
+                    Aluno aluno1 = new Aluno(matricula, nome, matricula, email, cpf);
+                    entidades.add(aluno1);
                     System.out.println("Aluno adicionado!\n");
                     aluno1.Ver_info();
                     undoList.add("add:aluno:undo");
-                } else if (x == 2) { // Remover
+                }
+
+                // Remover
+                else if (x == 2) {
                     System.out.println("Matrícula do aluno: ");
-                    int id = leitor.nextInt();
-                    for (int i = 0; i < alunos.size(); i++) {
-                        if (alunos.get(i).getMatricula() == id) {
-                            alunos_removidos.add(alunos.get(i));
-                            alunos.remove(i);
-                            System.out.println("Aluno removido!\n");
-                            undoList.add("rm:aluno:undo");
-                            break;
+                    id = leitor.nextInt();
+                    for (int i = 0; i < entidades.size(); i++) {
+                        if (entidades.get(i) instanceof Aluno) {
+                            if (entidades.get(i).getId() == id) {
+                                alunoExample = (Aluno) entidades.get(i);
+                                entidades_removidas.add(alunoExample.clone());
+                                entidades.remove(i);
+                                System.out.println("Aluno removido!\n");
+                                undoList.add("rm:aluno:undo");
+                                break;
+                            }
                         }
                     }
-                } else if (x == 3) { // Editar
+                }
+                // Editar 
+                else if (x == 3) {
                     System.out.println("Matrícula do aluno: ");
-                    int id = leitor.nextInt();
+                    id = leitor.nextInt();
                     boolean check = false;
-                    for (int i = 0; i < alunos.size(); i++) {
-                        if (alunos.get(i).getMatricula() == id) {
-                            alunoT = alunos.get(i);
-                            check = true;
-                            break;
+                    for (int i = 0; i < entidades.size(); i++) {
+                        if (entidades.get(i) instanceof Aluno) {
+                            if (entidades.get(i).getId() == id) {
+                                alunoExample = (Aluno) entidades.get(i);
+                                check = true;
+                                break;
+                            }
                         }
                     }
                     if (!check) {
                         System.out.println("Aluno inexistente.");
                         continue;
                     }
-                    Aluno edit = new Aluno(alunoT.getId(), alunoT.getNome(), alunoT.getMatricula(), alunoT.getEmail(), alunoT.getCpf());
-                    alunos_pre_editados.add(edit);
+                    
                     System.out.println("0 - Editar nome");
                     System.out.println("1 - Editar email");
                     System.out.println("2 - Trancar curso");
                     System.out.println("3 - Reabrir curso");
+
                     int aux = leitor.nextInt();
+
+                    entidades_pre_edicao.add(alunoExample.clone());
                     if (aux == 0) {
                         System.out.println("Digite o novo nome: ");
                         String new_name = leitor.next();
-                        alunoT.setNome(new_name);
+                        alunoExample.setNome(new_name);
                         System.out.println("Informação atualizada!\n");
                     } else if (aux == 1) {
                         System.out.println("Digite o novo email: ");
                         String email = leitor.next();
-                        alunoT.setEmail(email);
+                        alunoExample.setEmail(email);
                         System.out.println("Informação atualizada!\n");
                     } else if (aux == 2) {
                         System.out.println("Deseja continuar(S/N)?");
                         String resp = leitor.next();
                         if (resp.equals("S") || resp.equals("s")) {
-                            alunoT.setStatusCurso(false);
+                            alunoExample.setStatusCurso(false);
                             System.out.println("Informação atualizada!\n");
                         } else {
                             System.out.println("Operação cancelada.\n");
                         }
                     } else if (aux == 3) {
-                        if (alunoT.getStatusCurso() == false) {
+                        if (alunoExample.getStatusCurso() == false) {
                             System.out.println("Bem vindo(a), novamente!\n");
-                            edit.setStatusCurso(false);
-                            alunoT.setStatusCurso(true);
+                            alunoExample.setStatusCurso(true);
                         }
                         System.out.println("Sua matricula nao está trancada\n");
                     }
                     undoList.add("edit:aluno:undo");
-                } else if (x == 4) {
+                }
+
+                //Ver informações
+                else if (x == 4) {
                     System.out.println("Matrícula do aluno: ");
-                    int id = leitor.nextInt();
-                    for (int i = 0; i < alunos.size(); i++) {
-                        if (alunos.get(i).getMatricula() == id) {
-                            alunos.get(i).Ver_info();
-                            break;
+                    id = leitor.nextInt();
+                    for (int i = 0; i < entidades.size(); i++) {
+                        if (entidades.get(i) instanceof Aluno) {
+                            if (entidades.get(i).getId() == id) {
+                                entidades.get(i).Ver_info();
+                                break;
+                            }
                         }
                     }
-                } else if (x == 5) {
+                }
+
+                //Boletim
+                else if (x == 5) {
                     System.out.println("Matrícula do aluno: ");
-                    int id = leitor.nextInt();
-                    for (int i = 0; i < alunos.size(); i++) {
-                        if (alunos.get(i).getMatricula() == id) {
-                            System.out.println("Boletim do aluno " + alunos.get(i).getNome());
-                            alunos.get(i).setNotas("Algebra --- 4.6 --- 72h");
-                            alunos.get(i).setNotas("logica 1 --- 7.6 --- 72h");
-                            alunos.get(i).setNotas("Programacao 1 --- 8.6 --- 144h");
-                            alunos.get(i).setNotas("Teoria da Computacao --- 9.6 --- 72h");
-                            alunos.get(i).setNotas("Sistemas de Informacao --- 10.0 --- 72h");
-                            alunos.get(i).setNotas("Calculo3 --- 5.6 --- 72h");
-                            alunos.get(i).printBoletim();
-                            break;
+                    id = leitor.nextInt();
+                    for (int i = 0; i < entidades.size(); i++) {
+                        if (entidades.get(i) instanceof Aluno) {
+                            if (entidades.get(i).getId() == id) {
+                                alunoExample = (Aluno) entidades.get(i);
+                                System.out.println("Boletim do aluno " + alunoExample.getNome());
+                                alunoExample.setNotas("Algebra --- 4.6 --- 72h");
+                                alunoExample.setNotas("logica 1 --- 7.6 --- 72h");
+                                alunoExample.setNotas("Programacao 1 --- 8.6 --- 144h");
+                                alunoExample.setNotas("Teoria da Computacao --- 9.6 --- 72h");
+                                alunoExample.setNotas("Sistemas de Informacao --- 10.0 --- 72h");
+                                alunoExample.setNotas("Calculo3 --- 5.6 --- 72h");
+                                alunoExample.printBoletim();
+                                break;
+                            }
                         }
                     }
-                } else if (x == 6) {
+                }
+
+                //Histórico
+                else if (x == 6) {
                     System.out.println("Matrícula do aluno: ");
-                    int id = leitor.nextInt();
-                    for (int i = 0; i < alunos.size(); i++) {
-                        if (alunos.get(i).getMatricula() == id) {
-                            System.out.println("Histórico do aluno " + alunos.get(i).getNome());
-                            alunos.get(i).setHistoricoAnalitico("Carga Horária Cumprida --- 720h");
-                            alunos.get(i).setHistoricoAnalitico("Coeficiente de Rendimento --- 82.48%");
-                            alunos.get(i).setHistoricoAnalitico("1º período --- Programação 1 --- 7.3 --- AP");
-                            alunos.get(i).setHistoricoAnalitico("1º período --- Matemática Discreta --- 9.4 --- AP");
-                            alunos.get(i).setHistoricoAnalitico("2º período --- Banco de Dados --- 10 --- AP");
-                            alunos.get(i).setHistoricoAnalitico("2º período --- Estrutura de Dados --- 9.4 --- AP");
-                            alunos.get(i).setHistoricoAnalitico("3º período --- Àlgebra Linear --- 5.7 --- AP");
-                            alunos.get(i).setHistoricoAnalitico("3º período --- Teoria dos Grafos --- 3.1 --- REP");
-                            alunos.get(i).setHistoricoAnalitico("Eletiva --- Sistemas Distribídos --- 9.2 --- AP");
-                            alunos.get(i).printHistorico();
-                            break;
+                    id = leitor.nextInt();
+                    for (int i = 0; i < entidades.size(); i++) {
+                        if (entidades.get(i) instanceof Aluno) {
+                            if (entidades.get(i).getId() == id) {
+                                alunoExample = (Aluno) entidades.get(i);
+                                alunoExample.setHistoricoAnalitico("Carga Horária Cumprida --- 720h");
+                                alunoExample.setHistoricoAnalitico("Coeficiente de Rendimento --- 82.48%");
+                                alunoExample.setHistoricoAnalitico("1º período --- Programação 1 --- 7.3 --- AP");
+                                alunoExample.setHistoricoAnalitico("1º período --- Matemática Discreta --- 9.4 --- AP");
+                                alunoExample.setHistoricoAnalitico("2º período --- Banco de Dados --- 10 --- AP");
+                                alunoExample.setHistoricoAnalitico("2º período --- Estrutura de Dados --- 9.4 --- AP");
+                                alunoExample.setHistoricoAnalitico("3º período --- Àlgebra Linear --- 5.7 --- AP");
+                                alunoExample.setHistoricoAnalitico("3º período --- Teoria dos Grafos --- 3.1 --- REP");
+                                alunoExample.setHistoricoAnalitico("Eletiva --- Sistemas Distribídos --- 9.2 --- AP");
+                                System.out.println("Histórico do aluno " + alunoExample.getNome());
+                                alunoExample.printHistorico();
+                                break;
+                            }
                         }
                     }
-                } else if (x == 7) { // Matricula
+                }
+
+                // Matricula
+                else if (x == 7) {
                     System.out.print("Matrícula do aluno: ");
-                    int id = leitor.nextInt();
+                    id = leitor.nextInt();
                     System.out.print("Insira o nome da disciplina: ");
                     String disciplina = leitor.next();
-                    for (int i = 0; i < alunos.size(); i++) {
-                        if (alunos.get(i).getMatricula() == id) {
-                            Aluno aluno_pre = new Aluno(alunos.get(i).getId(), alunos.get(i).getNome(),
-                                    alunos.get(i).getMatricula(), alunos.get(i).getEmail(), alunos.get(i).getCpf());
-                            alunos_pre_editados.add(aluno_pre);
-                            alunos.get(i).setDisciplinasAtuais(disciplina);
-                            undoList.add("edit:aluno:undo");
-                            System.out.println("Disciplina inserida com sucesso!");
-                            break;
+                    for (int i = 0; i < entidades.size(); i++) {
+                        if (entidades.get(i) instanceof Aluno) {
+                            if (entidades.get(i).getId() == id) {
+                                alunoExample = (Aluno) entidades.get(i);
+                                entidades_pre_edicao.add(alunoExample.clone());
+                                alunoExample.setDisciplinasAtuais(disciplina);
+                                undoList.add("edit:aluno:undo");
+                                System.out.println("Disciplina inserida com sucesso!");
+                                break;
+                            }
                         }
                     }
-                } else if (x == 8) { // listar disciplinas
+                }
+
+                // Listar Disciplinas
+                else if (x == 8) {
                     System.out.println("Matrícula do aluno: ");
-                    int id = leitor.nextInt();
-                    for (int i = 0; i < alunos.size(); i++) {
-                        if (alunos.get(i).getMatricula() == id) {
-                            alunos.get(i).printDisciplina();
+                    id = leitor.nextInt();
+                    for (int i = 0; i < entidades.size(); i++) {
+                        if (entidades.get(i).getId() == id) {
+                            alunoExample = (Aluno) entidades.get(i);
+                            alunoExample.printDisciplina();
                             break;
                         }
                     }
@@ -422,19 +554,24 @@ public class Menu {
                 } else {
                     System.out.println("Opção não reconhecida, tente novamente.");
                 }
-            } else if (x == 1) { // TURMA
-                System.out.println(
-                        "\n[1] - Adicionar turma;\n[2] - Editar dados de uma turma;\n[3] - Remover turma;\n[4] - Lista dados de uma turma;\n[5] - Listar turmas.");
+            }
+
+            // TURMA
+            else if (x == 1) {
+                ArrayList<String> dias1 = new ArrayList<String>();
+                ArrayList<String> horarios1 = new ArrayList<String>();
+                ArrayList<String> alunos1 = new ArrayList<String>();
+                Turma turmaExample = new Turma(0, null, dias1, horarios1, null, alunos1);
+                System.out.println("\n[1] - Adicionar turma;\n[2] - Editar dados de uma turma;\n[3] - Remover turma;\n[4] - Lista dados de uma turma;\n[5] - Listar turmas.");
                 System.out.print("Selecione um dos comandos: ");
                 String input;
                 input = leitor.next();
+
+                //ADICIONAR - TURMA
                 if (input.equals("1")) {
                     int id;
                     String disciplina;
-                    ArrayList<String> dias = new ArrayList<String>();
-                    ArrayList<String> horarios = new ArrayList<String>();
                     String professor;
-                    ArrayList<String> alunos1 = new ArrayList<String>();
 
                     System.out.println("\nInsira os dados da turma:");
                     System.out.print("ID da turma: ");
@@ -448,7 +585,7 @@ public class Menu {
                         if (value.equals("end")) {
                             break;
                         }
-                        dias.add(value);
+                        dias1.add(value);
                         i++;
                     }
                     System.out.print("Horários de aula da turma (para parar, insira 'end'): ");
@@ -458,7 +595,7 @@ public class Menu {
                         if (value.equals("end")) {
                             break;
                         }
-                        horarios.add(value);
+                        horarios1.add(value);
                         i++;
                     }
                     System.out.print("Professor da turma: ");
@@ -473,39 +610,43 @@ public class Menu {
                         alunos1.add(value);
                         i++;
                     }
-                    Turma turma1 = new Turma(id, disciplina, dias, horarios, professor, alunos1);
+                    Turma turma1 = new Turma(id, disciplina, dias1, horarios1, professor, alunos1);
                     undoList.add("add:turma:undo");
-                    turmas.add(turma1);
+                    entidades.add(turma1);
                     System.out.println("Turma adicionada!\n");
-                } else if (input.equals("2")) {
-                    ArrayList<String> dias1 = new ArrayList<String>();
-                    ArrayList<String> horarios1 = new ArrayList<String>();
-                    ArrayList<String> alunos1 = new ArrayList<String>();
-                    Turma turmateste = new Turma(0 , null, dias1, horarios1, null, alunos1);
+                }
+                
+                //Editar TURMA
+                else if (input.equals("2")) {
                     System.out.print("Informe o ID da turma que deseja editar: ");
                     int id = leitor.nextInt();
-                    Boolean ne = false;
-                    for (int i = 0; i < turmas.size(); i++) {
-                        if (turmas.get(i).getId() == id) {
-                            turmateste = turmas.get(i);
-                            ne = true;
-                            break;
+                    Boolean check = false;
+
+                    for (int i = 0; i < entidades.size(); i++) {
+                        if (entidades.get(i) instanceof Turma) {
+                            if (entidades.get(i).getId() == id) {
+                                turmaExample = (Turma) entidades.get(i);
+                                check = true;
+                                break;
+                            }
                         }
                     }
-                    if (ne == false) {
+
+                    if (!check) {
                         System.out.println("A turma informada não existe no sistema.\n");
                         continue;
                     }
-                    Turma turmaUndo = new Turma(turmateste.getId(), turmateste.getNome(), turmateste.getDias(),
-                            turmateste.getHorarios(), turmateste.getProfessor(), turmateste.getAlunos());
-                    turmas_pre_editadas.add(turmaUndo);
+
+                    entidades_pre_edicao.add(turmaExample.clone());
                     undoList.add("edit:turma:undo");
+
                     System.out.print(
                             "[1] - Editar disciplina;\n[2] - Editar dias de aula;\n[3] - Editar horários de aula;\n[4] - Editar professor;\n[5] - Editar alunos.\nSelecione um dos comandos: ");
                     int op = leitor.nextInt();
+
                     if (op == 1) {
                         System.out.print("Insira o novo 'disciplina': ");
-                        turmateste.setNome(leitor.next());
+                        turmaExample.setNome(leitor.next());
                     } else if (op == 2) {
                         ArrayList<String> lista = new ArrayList<String>();
                         System.out.print("Insira os novos dias de aula da turma (para parar, insira 'end'): ");
@@ -518,57 +659,67 @@ public class Menu {
                             lista.add(value);
                             i++;
                         }
-                        turmateste.setDias(lista);
+                        turmaExample.setDias(lista);
                     } else if (op == 3) {
                         ArrayList<String> lista = new ArrayList<String>();
                         System.out.print("Insira os novos horários de aula da turma (para parar, insira 'end'): ");
                         int i = 0;
+                        leitor.nextLine();
                         while (i < 14) {
-                            String value = leitor.next();
+                            String value = leitor.nextLine();
                             if (value.equals("end")) {
                                 break;
                             }
                             lista.add(value);
                             i++;
                         }
-                        turmateste.setHorarios(lista);
+                        turmaExample.setHorarios(lista);
                     } else if (op == 4) {
                         System.out.print("Insira o(a) novo(a) professor(a) da turma: ");
-                        turmateste.setProfessor(leitor.next());
+                        turmaExample.setProfessor(leitor.next());
                     } else if (op == 5) {
                         ArrayList<String> lista = new ArrayList<String>();
                         System.out.print("Insira os novos alunos da turma (para parar, insira 'end'): ");
                         int i = 0;
+                        leitor.nextLine();
                         while (i < 14) {
-                            String value = leitor.next();
+                            String value = leitor.nextLine();
                             if (value.equals("end")) {
                                 break;
                             }
                             lista.add(value);
                             i++;
                         }
-                        turmateste.setAlunos(lista);
+                        turmaExample.setAlunos(lista);
                     }
                     System.out.println("Dados da turma editados com sucesso!");
 
-                } else if (input.equals("3")) {
+                }
+
+                //REMOÇÃO - TURMA
+                else if (input.equals("3")) {
                     System.out.print("\nInforme o ID da turma a ser removida: ");
                     int op = leitor.nextInt();
-                    for (int i = 0; i < turmas.size(); i++) {
-                        if (turmas.get(i).getId() == op) {
-                            turmas_removidas.add(turmas.get(i));
-                            undoList.add("rm:turma:undo");
-                            turmas.remove(i);
-                            System.out.printf("A turma %s foi removida do sistema.\n", i);
+                    for (int i = 0; i < entidades.size(); i++) {
+                        if (entidades.get(i) instanceof Turma) {
+                            if(entidades.get(i).getId() == op){
+                                turmaExample = (Turma)entidades.get(i);
+                                entidades_removidas.add(turmaExample.clone());
+                                undoList.add("rm:turma:undo");
+                                entidades.remove(i);
+                                System.out.printf("A turma %s foi removida do sistema.\n", i);
+                            }
                         }
                     }
-                } else if (input.equals("4")) {
+                }
+                //VER INFORMAÇÕES - TURMA
+                else if (input.equals("4")) {
                     System.out.print("\nInforme o ID da turma a ser buscada: ");
                     int src = leitor.nextInt();
                     int ne = 0;
-                    for (int i = 0; i < turmas.size(); i++) {
-                        if (turmas.get(i).getId() == src) {
-                            turmas.get(i).Ver_info();
+                    for (int i = 0; i < entidades.size(); i++) {
+                        if (entidades.get(i).getId() == src) {
+                            entidades.get(i).Ver_info();
                             ne += 1;
                             break;
                         }
@@ -576,10 +727,15 @@ public class Menu {
                     if (ne == 0) {
                         System.out.println("A turma informada não existe no sistema.");
                     }
-                } else if (input.equals("5")) {
+                }
+
+                //Listar TURMAS
+                else if (input.equals("5")) {
                     System.out.println("\nTurmas cadastradas:");
-                    for (int i = 0; i < turmas.size(); i++) {
-                        System.out.printf("[%s] - %s\n", turmas.get(i).getId(), turmas.get(i).getNome());
+                    for (int i = 0; i < entidades.size(); i++) {
+                        if (entidades.get(i) instanceof Turma) {
+                            System.out.printf("[%s] - %s\n", entidades.get(i).getId(), entidades.get(i).getNome());
+                        }
                     }
                     System.out.println("\n");
                 } else {
@@ -588,9 +744,7 @@ public class Menu {
             } else if (x == 4) { // UNDO
                 Menu menu = new Menu();
                 if (undoList.size() > 0) {
-                    menu.undoRedo(undoList, redoList, professores, professores_removidos, professores_pre_editados,
-                            professores_editados, alunos, alunos_removidos, alunos_pre_editados,
-                            alunos_editados, turmas, turmas_removidas, turmas_pre_editadas, turmas_editadas);
+                    menu.undoRedo(undoList, redoList, entidades,entidades_removidas, entidades_pre_edicao, entidades_editadas);
                     System.out.println("Ultima operação desfeita!");
                 } else {
                     System.out.println("Não há ações a serem desfeitas.");
@@ -598,14 +752,12 @@ public class Menu {
             } else if (x == 5) {
                 Menu menu = new Menu();
                 if (redoList.size() > 0) {
-                    menu.undoRedo(redoList, undoList, professores, professores_removidos, professores_pre_editados,
-                            professores_editados, alunos, alunos_removidos, alunos_pre_editados,
-                            alunos_editados, turmas, turmas_removidas, turmas_pre_editadas, turmas_editadas);
+                    menu.undoRedo(redoList, undoList, entidades, entidades_removidas, entidades_pre_edicao, entidades_editadas);
                     System.out.println("Ultima operação refeita!");
                 } else {
                     System.out.println("Não há ações a serem refeitas.");
                 }
-            } else if (x == 6) {
+            }else if (x == 6) {
                 break;
             }
         }
